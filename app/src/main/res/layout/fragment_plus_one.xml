@@ -1,0 +1,57 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+
+    <TextView
+        android:id="@+id/question"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        android:textSize="30sp"
+        android:textColor="#ff2222"
+        android:textStyle="bold"
+
+        />
+
+    <RadioButton
+        android:id="@+id/option1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/question"
+        android:layout_marginStart="42dp"
+        android:layout_marginTop="40dp"
+        android:text="RadioButton" />
+
+    <RadioButton
+        android:id="@+id/option2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/option1"
+        android:layout_below="@+id/option1"
+        android:layout_marginTop="64dp"
+        android:text="RadioButton" />
+
+    <RadioButton
+        android:id="@+id/option3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/option2"
+        android:layout_below="@+id/option2"
+        android:layout_marginTop="42dp"
+        android:text="RadioButton" />
+
+    <RadioButton
+        android:id="@+id/option4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/option3"
+        android:layout_below="@+id/option3"
+        android:layout_marginTop="45dp"
+        android:text="RadioButton" />
+
+
+</RelativeLayout>
