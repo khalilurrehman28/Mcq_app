@@ -75,9 +75,7 @@ public class Main2Activity extends FragmentActivity {
                 invalidateOptionsMenu();
             }
         });*/
-        //ServerDataGetter svn = new ServerDataGetter(this);
 
-        //ServerDataGetter.getInstance().;
     }
 
     @Override
