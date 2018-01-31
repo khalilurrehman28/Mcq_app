@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RadioButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.dupleit.kotlin.mcq_app.R;
 
@@ -44,6 +45,7 @@ public class questionFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mPageNumber = getArguments().getInt(ARG_PAGE);
+        Toast.makeText(getContext(), ""+mPageNumber, Toast.LENGTH_SHORT).show();
     }
 
     @SuppressLint("StringFormatInvalid")
@@ -55,7 +57,7 @@ public class questionFragment extends Fragment {
                 .inflate(R.layout.fragment_question, container, false);
 
         // Set the title view to show the page number.
-     /*   ((TextView) rootView.findViewById(android.R.id.text1)).setText(
+        /*   ((TextView) rootView.findViewById(android.R.id.text1)).setText(
                 getString(R.string.title_template_step, mPageNumber + 1));*/
         question = (TextView) rootView.findViewById(R.id.question);
         option1 = (RadioButton) rootView.findViewById(R.id.option1);

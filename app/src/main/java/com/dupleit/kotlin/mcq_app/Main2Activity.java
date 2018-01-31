@@ -1,6 +1,5 @@
 package com.dupleit.kotlin.mcq_app;
 
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
@@ -8,10 +7,8 @@ import android.graphics.drawable.Drawable;
 import android.os.StrictMode;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
-import android.support.v4.app.NavUtils;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.text.Html;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -24,7 +21,6 @@ import com.dupleit.kotlin.mcq_app.Network.ApiClient;
 import com.dupleit.kotlin.mcq_app.adapter.ViewPagerAdapter;
 import com.dupleit.kotlin.mcq_app.modal.Question;
 import com.dupleit.kotlin.mcq_app.modal.Question_Data;
-import com.dupleit.kotlin.mcq_app.utils.constants;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -41,7 +37,7 @@ public class Main2Activity extends FragmentActivity {
 
     private List<Question_Data> question;
     TextView testingId;
-
+    //private static List<Question_Data> ServerQuestionData;
     private static final int NUM_PAGES = 5;
 
     /**
@@ -61,15 +57,15 @@ public class Main2Activity extends FragmentActivity {
         setContentView(R.layout.activity_main);
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
-
+        //ServerQuestionData = new ArrayList<>();
         //testingId = findViewById(R.id.textView);
-        question = new ArrayList<>();
-        getAllQuestionFromServer();
+        question = new ArrayList<>(ServerDataGetter.getInstance().getServerQuestionData());
+        //getAllQuestionFromServer();
         // Instantiate a ViewPager and a PagerAdapter.
         mPager = (ViewPager) findViewById(R.id.pager);
         mPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(),question);
         mPager.setAdapter(mPagerAdapter);
-        mPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
+        /*mPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
             @Override
             public void onPageSelected(int position) {
                 // When changing pages, reset the action bar actions since they are dependent
@@ -78,7 +74,10 @@ public class Main2Activity extends FragmentActivity {
                 // but for simplicity, the activity provides the actions in this sample.
                 invalidateOptionsMenu();
             }
-        });
+        });*/
+        //ServerDataGetter svn = new ServerDataGetter(this);
+
+        //ServerDataGetter.getInstance().;
     }
 
     @Override
@@ -104,7 +103,7 @@ public class Main2Activity extends FragmentActivity {
             case android.R.id.home:
                 // Navigate "up" the demo structure to the launchpad activity.
                 // See http://developer.android.com/design/patterns/navigation.html for more.
-                NavUtils.navigateUpTo(this, new Intent(this, Main2Activity.class));
+                //NavUtils.navigateUpTo(this, new Intent(this, Main2Activity.class));
                 return true;
 
             case R.id.action_previous:
@@ -132,7 +131,8 @@ public class Main2Activity extends FragmentActivity {
                 if(response!=null && response.isSuccessful()) {
                     //If the app is on foreground run the task
                     Log.d("question",""+response.body().getQuestion().get(2).getQUESTIONTEXT());
-
+                    question = response.body().getQuestion();
+                    mPagerAdapter.notifyDataSetChanged();
                     //webview.loadUrl(response.body().getQuestion().get(2).getQUESTIONTEXT());
 
                     /*

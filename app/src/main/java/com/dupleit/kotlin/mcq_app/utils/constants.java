@@ -5,6 +5,9 @@ package com.dupleit.kotlin.mcq_app.utils;
  */
 
 public class constants {
-    public static String webUrl = "http://www.demo.dupleit.com/";
-    public static String api_url = "school_v1/welcome/";
+    public static String webUrl = "http://mcq.dupleit.com/";
+    public static String api_url = "home/";
+    public static String notStarted = "notStarted";
+    public static String Started = "inProgress";
+    public static String Submittd = "isFinished";
 }
