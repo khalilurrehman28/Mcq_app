@@ -77,15 +77,20 @@ public class ServerDataGetter {
         return ServerQuestionData;
     }
 
-    public static List<QuestionModal> getConvertedQuestionData() {
+    public List<QuestionModal> getConvertedQuestionData() {
         return ConvertedQuestionData;
     }
 
-    public static String getProgress() {
+    public String getProgress() {
         return Progress;
     }
 
-    public static void setProgress(String progress) {
+    public void setProgress(String progress) {
         Progress = progress;
     }
+
+    public int getQuestionCount(){
+        return ServerQuestionData.size();
+    }
+
 }

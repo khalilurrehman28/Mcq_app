@@ -10,4 +10,5 @@ public class constants {
     public static String notStarted = "notStarted";
     public static String Started = "inProgress";
     public static String Submittd = "isFinished";
+    public static String ARG_PAGE = "page";
 }

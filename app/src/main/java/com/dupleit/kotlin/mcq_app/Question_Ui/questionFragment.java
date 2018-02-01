@@ -1,8 +1,6 @@
 package com.dupleit.kotlin.mcq_app.Question_Ui;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -14,17 +12,15 @@ import android.widget.Toast;
 
 import com.dupleit.kotlin.mcq_app.R;
 
+import static com.dupleit.kotlin.mcq_app.utils.constants.ARG_PAGE;
+
 public class questionFragment extends Fragment {
     /**
      * The argument key for the page number this fragment represents.
      */
-    public static final String ARG_PAGE = "page";
-
     TextView question;
     RadioButton option1,option2,option3,option4;
-    /**
-     * The fragment's page number, which is set to the argument value for {@link #ARG_PAGE}.
-     */
+
     private int mPageNumber;
 
     /**
@@ -64,7 +60,7 @@ public class questionFragment extends Fragment {
         option2 = (RadioButton) rootView.findViewById(R.id.option2);
         option3 = (RadioButton) rootView.findViewById(R.id.option3);
         option4 = (RadioButton) rootView.findViewById(R.id.option4);
-
+        question.setText(""+getPageNumber());
         return rootView;
     }
 
