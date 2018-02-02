@@ -1,53 +1,58 @@
 package com.dupleit.kotlin.mcq_app;
 
-import android.os.StrictMode;
-import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.widget.TextView;
+import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.widget.Toast;
 
+import com.dupleit.kotlin.mcq_app.Network.APIService;
+import com.dupleit.kotlin.mcq_app.Network.ApiClient;
 import com.dupleit.kotlin.mcq_app.adapter.ViewPagerAdapter;
+import com.dupleit.kotlin.mcq_app.modal.Question;
 import com.dupleit.kotlin.mcq_app.modal.QuestionModal;
+import com.dupleit.kotlin.mcq_app.modal.Question_Data;
+import com.dupleit.kotlin.mcq_app.utils.constants;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Main2Activity extends FragmentActivity {
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
-    private List<QuestionModal> question;
-    TextView testingId;
-    //private static List<Question_Data> ServerQuestionData;
-    private static final int NUM_PAGES = 5;
+public class Main2Activity extends AppCompatActivity {
 
-    /**
-     * The pager widget, which handles animation and allows swiping horizontally to access previous
-     * and next wizard steps.
-     */
     private ViewPager mPager;
 
     /**
      * The pager adapter, which provides the pages to the view pager widget.
      */
     private PagerAdapter mPagerAdapter;
+    //List<QuestionModal> question;
 
+    private static List<QuestionModal> ConvertedQuestionData;
+
+    private static List<Question_Data> ServerQuestionData;
+
+    private static String Progress = constants.notStarted;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-        StrictMode.setThreadPolicy(policy);
-        //ServerQuestionData = new ArrayList<>();
-        //testingId = findViewById(R.id.textView);
-        question = new ArrayList<>(ServerDataGetter.getInstance().getConvertedQuestionData());
-        //getAllQuestionFromServer();
-        // Instantiate a ViewPager and a PagerAdapter.
+
+        /*question = new ArrayList<>(ServerDataGetter.getInstance().getConvertedQuestionData());
+        Toast.makeText(this, ""+question.size(), Toast.LENGTH_SHORT).show();*/
+        ConvertedQuestionData = new ArrayList<>();
+        ServerQuestionData = new ArrayList<>();
         mPager = (ViewPager) findViewById(R.id.pager);
-        mPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(),question);
+        mPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(),ConvertedQuestionData);
         mPager.setAdapter(mPagerAdapter);
-        /*mPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
+
+        getServerData();
+        /*mPager.setCurrentItem(1,false);
+        mPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
             @Override
             public void onPageSelected(int position) {
                 // When changing pages, reset the action bar actions since they are dependent
@@ -56,49 +61,46 @@ public class Main2Activity extends FragmentActivity {
                 // but for simplicity, the activity provides the actions in this sample.
                 invalidateOptionsMenu();
             }
+
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                super.onPageScrolled(position, positionOffset, positionOffsetPixels);
+                Toast.makeText(Main2Activity.this, ""+position, Toast.LENGTH_SHORT).show();
+            }
         });*/
 
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        super.onCreateOptionsMenu(menu);
-        getMenuInflater().inflate(R.menu.activity_screen_slide, menu);
+    private void getServerData() {
+        APIService service = ApiClient.getClient().create(APIService.class);
+        Call<Question> userCall = service.getQuestionAll();
+        userCall.enqueue(new Callback<Question>() {
+            @Override
+            public void onResponse(Call<Question> call, Response<Question> response) {
+                if (response != null && response.isSuccessful()) {
+                    ServerQuestionData = response.body().getQuestion();
+                    for (Question_Data question: ServerQuestionData) {
+                        ConvertedQuestionData.add(new QuestionModal(question,false));
+                    }
 
-        menu.findItem(R.id.action_previous).setEnabled(mPager.getCurrentItem() > 0);
+                    for (QuestionModal newQuestion: ConvertedQuestionData) {
+                        Log.d("userQuestion",newQuestion.getUserQuestion().getQUESTIONID()+"---"+newQuestion.getUserQuestion().getQUESTIONTEXT()+"---"+newQuestion.isAttempted());
+                    }
+                    mPager.getAdapter().notifyDataSetChanged();
 
-        // Add either a "next" or "finish" button to the action bar, depending on which page
-        // is currently selected.
-        MenuItem item = menu.add(Menu.NONE, R.id.action_next, Menu.NONE,
-                (mPager.getCurrentItem() == mPagerAdapter.getCount() - 1)
-                        ? R.string.action_finish
-                        : R.string.action_next);
-        item.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
-        return true;
+
+                } else {
+                    //Toast.makeText( , "data not found", Toast.LENGTH_SHORT).show();
+                    Log.d("userQuestion","data not found");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Question> call, Throwable t) {
+                Log.d("onFailure", t.toString());
+            }
+        });
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                // Navigate "up" the demo structure to the launchpad activity.
-                // See http://developer.android.com/design/patterns/navigation.html for more.
-                //NavUtils.navigateUpTo(this, new Intent(this, Main2Activity.class));
-                return true;
 
-            case R.id.action_previous:
-                // Go to the previous step in the wizard. If there is no previous step,
-                // setCurrentItem will do nothing.
-                mPager.setCurrentItem(mPager.getCurrentItem() - 1);
-                return true;
-
-            case R.id.action_next:
-                // Advance to the next step in the wizard. If there is no next step, setCurrentItem
-                // will do nothing.
-                mPager.setCurrentItem(mPager.getCurrentItem() + 1);
-                return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
 }

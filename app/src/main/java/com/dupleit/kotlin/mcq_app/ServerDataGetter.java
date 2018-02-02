@@ -1,8 +1,6 @@
 package com.dupleit.kotlin.mcq_app;
 
-import android.content.Context;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.dupleit.kotlin.mcq_app.Network.APIService;
 import com.dupleit.kotlin.mcq_app.Network.ApiClient;

@@ -3,14 +3,15 @@ package com.dupleit.kotlin.mcq_app.Question_Ui;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RadioButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.dupleit.kotlin.mcq_app.R;
+import com.dupleit.kotlin.mcq_app.utils.constants;
 
 import static com.dupleit.kotlin.mcq_app.utils.constants.ARG_PAGE;
 
@@ -34,34 +35,28 @@ public class questionFragment extends Fragment {
         return fragment;
     }
 
-    public questionFragment() {
-    }
-
+    /**
+     * When creating, retrieve this instance's number from its arguments.
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mPageNumber = getArguments().getInt(ARG_PAGE);
-        Toast.makeText(getContext(), ""+mPageNumber, Toast.LENGTH_SHORT).show();
     }
 
-    @SuppressLint("StringFormatInvalid")
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout containing a title and body text.
-        ViewGroup rootView = (ViewGroup) inflater
-                .inflate(R.layout.fragment_question, container, false);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View v = inflater.inflate(R.layout.fragment_question, container, false);
+        mPageNumber = getArguments() != null ? getArguments().getInt(ARG_PAGE) : 1;
 
-        // Set the title view to show the page number.
-        /*   ((TextView) rootView.findViewById(android.R.id.text1)).setText(
-                getString(R.string.title_template_step, mPageNumber + 1));*/
-        question = (TextView) rootView.findViewById(R.id.question);
-        option1 = (RadioButton) rootView.findViewById(R.id.option1);
-        option2 = (RadioButton) rootView.findViewById(R.id.option2);
-        option3 = (RadioButton) rootView.findViewById(R.id.option3);
-        option4 = (RadioButton) rootView.findViewById(R.id.option4);
-        question.setText(""+getPageNumber());
-        return rootView;
+        question = (TextView) v.findViewById(R.id.question);
+        option1 = (RadioButton) v.findViewById(R.id.option1);
+        option2 = (RadioButton) v.findViewById(R.id.option2);
+        option3 = (RadioButton) v.findViewById(R.id.option3);
+        option4 = (RadioButton) v.findViewById(R.id.option4);
+
+        question.setText(getArguments().getString(constants.question));
+        Log.d(constants.question,getArguments().getString(constants.question));
+        return v;
     }
 
     /**
