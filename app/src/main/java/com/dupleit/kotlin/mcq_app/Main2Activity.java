@@ -86,8 +86,10 @@ public class Main2Activity extends AppCompatActivity {
                     for (QuestionModal newQuestion: ConvertedQuestionData) {
                         Log.d("userQuestion",newQuestion.getUserQuestion().getQUESTIONID()+"---"+newQuestion.getUserQuestion().getQUESTIONTEXT()+"---"+newQuestion.isAttempted());
                     }
-                    mPager.getAdapter().notifyDataSetChanged();
 
+                    ServerDataGetter.getInstance().setConvertedQuestionData(ConvertedQuestionData);
+
+                    mPager.getAdapter().notifyDataSetChanged();
 
                 } else {
                     //Toast.makeText( , "data not found", Toast.LENGTH_SHORT).show();

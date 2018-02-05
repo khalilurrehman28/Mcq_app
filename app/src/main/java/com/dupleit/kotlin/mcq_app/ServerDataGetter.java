@@ -39,7 +39,7 @@ public class ServerDataGetter {
     protected ServerDataGetter() {
         ConvertedQuestionData = new ArrayList<>();
         ServerQuestionData = new ArrayList<>();
-        getAllQuestionFromServer();
+       // getAllQuestionFromServer();
     }
 
     private void getAllQuestionFromServer() {
@@ -91,4 +91,7 @@ public class ServerDataGetter {
         return ServerQuestionData.size();
     }
 
+    public void setConvertedQuestionData(List<QuestionModal> convertedQuestionData) {
+        ConvertedQuestionData = convertedQuestionData;
+    }
 }
