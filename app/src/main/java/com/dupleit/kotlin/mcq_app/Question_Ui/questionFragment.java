@@ -89,7 +89,6 @@ public class questionFragment extends Fragment {
             }
         });
 
-
         radioGroup = (RadioGroup) v.findViewById(R.id.radioGroup);
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -115,8 +114,6 @@ public class questionFragment extends Fragment {
                 ConvertedQuestionData.get(mPageNumber).setProcessStart(constants.Started);
             }
         });
-
-        //Log.d(constants.question,getArguments().getString(constants.question));
         return v;
     }
 

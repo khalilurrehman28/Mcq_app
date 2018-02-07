@@ -92,11 +92,9 @@ public class Main2Activity extends AppCompatActivity {
                     }
                 }
 
-                Toast.makeText(Main2Activity.this, "Total attempted is "+count, Toast.LENGTH_SHORT).show();
+                Toast.makeText(Main2Activity.this, "Total Correct Answer is "+count, Toast.LENGTH_SHORT).show();
             }
         });
-
-
     }
 
     private void getServerData() {
