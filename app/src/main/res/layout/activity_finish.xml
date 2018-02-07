@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.dupleit.kotlin.mcq_app.FinishActivity">
+
+
+    <TextView
+        android:id="@+id/Result"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="66dp"
+        android:layout_marginTop="80dp"
+        android:text="Result" />
+
+    <TextView
+        android:id="@+id/Correct"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/Result"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="91dp"
+        android:text="Correct" />
+
+    <TextView
+        android:id="@+id/marked"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/Result"
+        android:layout_below="@+id/Result"
+        android:layout_marginTop="162dp"
+        android:text="Marked" />
+
+    <TextView
+        android:id="@+id/ViewAll"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/marked"
+        android:layout_alignEnd="@+id/Correct"
+        android:text="ViewAll" />
+
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="53dp"
+        android:layout_marginStart="20dp"
+        android:layout_toEndOf="@+id/marked"
+        android:text="Button" />
+</RelativeLayout>

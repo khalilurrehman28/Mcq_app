@@ -14,10 +14,14 @@ public class QuestionModal{
     private String processStart = constants.notStarted;
 
     private  int answerProvided;
+    private int timeCounter;
+    private boolean ismarked;
 
     public QuestionModal(Question_Data userQuestion, boolean isAttempted) {
         this.userQuestion = userQuestion;
         this.IsAttempted = isAttempted;
+        this.timeCounter = 0;
+        this.ismarked = false;
     }
 
     public Question_Data getUserQuestion() {
@@ -52,6 +56,21 @@ public class QuestionModal{
         this.answerProvided = answerProvided;
     }
 
+    public int getTimeCounter() {
+        return timeCounter;
+    }
+
+    public void setTimeCounter(int timeCounter) {
+        this.timeCounter = timeCounter;
+    }
+
+    public boolean isIsmarked() {
+        return ismarked;
+    }
+
+    public void setIsmarked(boolean ismarked) {
+        this.ismarked = ismarked;
+    }
 }
 
 

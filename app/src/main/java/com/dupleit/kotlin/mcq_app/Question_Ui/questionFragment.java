@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -20,6 +21,8 @@ import com.dupleit.kotlin.mcq_app.utils.constants;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import static com.dupleit.kotlin.mcq_app.utils.constants.ARG_PAGE;
 
@@ -31,10 +34,29 @@ public class questionFragment extends Fragment {
     RadioButton option1,option2,option3,option4;
     RadioGroup radioGroup;
     Button erase;
+    ImageView markQuestion;
+    TextView Timertxt ;
 
     private int mPageNumber;
 
     private static List<QuestionModal> ConvertedQuestionData;
+    private Timer t;
+
+    TimerTask timer= new TimerTask(){
+        @Override
+        public void run() {
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    int counter = ConvertedQuestionData.get(mPageNumber).getTimeCounter();
+                    counter+=1;
+                    ConvertedQuestionData.get(mPageNumber).setTimeCounter(counter);
+                    Timertxt.setText(Integer.toString(counter));
+                }
+            });
+
+        }
+    };
 
     /**
      * Factory method for this fragment class. Constructs a new fragment for the given page number.
@@ -53,11 +75,13 @@ public class questionFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_question, container, false);
+        ConvertedQuestionData = new ArrayList<>(ServerDataGetter.getInstance().getConvertedQuestionData());
         mPageNumber = getArguments() != null ? getArguments().getInt(ARG_PAGE) : 1;
         question = (TextView) v.findViewById(R.id.question);
         option1 = v.findViewById(R.id.option1);
@@ -65,8 +89,29 @@ public class questionFragment extends Fragment {
         option3 = v.findViewById(R.id.option3);
         option4 = v.findViewById(R.id.option4);
         erase = v.findViewById(R.id.erase);
+        //Timertxt = v.findViewById(R.id.TimerText);
+        markQuestion = v.findViewById(R.id.markQuestion);
+        if (ConvertedQuestionData.get(mPageNumber).isIsmarked()){
+            markQuestion.setImageResource(R.drawable.ic_marked_click);
+        }else{
+            markQuestion.setImageResource(R.drawable.ic_marked_unclicked);
+        }
+        markQuestion.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (ConvertedQuestionData.get(mPageNumber).isIsmarked()){
+                    markQuestion.setImageResource(R.drawable.ic_marked_unclicked);
+                    ConvertedQuestionData.get(mPageNumber).setIsmarked(false);
+                }else{
+                    markQuestion.setImageResource(R.drawable.ic_marked_click);
+                    ConvertedQuestionData.get(mPageNumber).setIsmarked(true);
+                }
+            }
+        });
 
-        ConvertedQuestionData = new ArrayList<>(ServerDataGetter.getInstance().getConvertedQuestionData());
+
+        t = new Timer();
+        t.scheduleAtFixedRate(timer , 0 , 1000);
 
         question.setText(Html.fromHtml(ConvertedQuestionData.get(mPageNumber).getUserQuestion().getQUESTIONTEXT(), new GlideImageGetter(getContext(), question), null));
         option1.setText(Html.fromHtml(ConvertedQuestionData.get(mPageNumber).getUserQuestion().getQUESTIONOPTION1(), new GlideImageGetter(getContext(), option1), null));
@@ -124,4 +169,10 @@ public class questionFragment extends Fragment {
         return mPageNumber;
     }
 
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        t.cancel();
+    }
 }

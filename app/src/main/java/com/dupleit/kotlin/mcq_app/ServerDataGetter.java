@@ -54,10 +54,7 @@ public class ServerDataGetter {
                         ConvertedQuestionData.add(new QuestionModal(question,false));
                     }
 
-                    for (QuestionModal newQuestion: ConvertedQuestionData) {
-                        Log.d("userQuestion",newQuestion.getUserQuestion().getQUESTIONID()+"---"+newQuestion.getUserQuestion().getQUESTIONTEXT()+"---"+newQuestion.isAttempted());
-                    }
-
+                    ObserveChnage.isUpdated(true);
                 } else {
                     //Toast.makeText( , "data not found", Toast.LENGTH_SHORT).show();
                     Log.d("userQuestion","data not found");
@@ -94,4 +91,10 @@ public class ServerDataGetter {
     public void setConvertedQuestionData(List<QuestionModal> convertedQuestionData) {
         ConvertedQuestionData = convertedQuestionData;
     }
+
+    public interface IServerDataGeter {
+        Boolean isUpdated(boolean b);
+    }
+
+    private IServerDataGeter ObserveChnage;
 }

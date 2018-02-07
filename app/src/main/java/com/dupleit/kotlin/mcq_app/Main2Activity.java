@@ -1,6 +1,7 @@
 package com.dupleit.kotlin.mcq_app;
 
 import android.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -9,6 +10,7 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.dupleit.kotlin.mcq_app.Network.APIService;
@@ -64,6 +66,7 @@ public class Main2Activity extends AppCompatActivity {
         previous = findViewById(R.id.previous);
         finish = findViewById(R.id.finish);
 
+
         getServerData();
 
         next.setOnClickListener(new View.OnClickListener() {
@@ -83,7 +86,7 @@ public class Main2Activity extends AppCompatActivity {
         finish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                int count =0;
+                /*int count =0;
                 for (int i = 0; i <ConvertedQuestionData.size() ; i++) {
                     if (ConvertedQuestionData.get(i).isAttempted()){
                         if (ConvertedQuestionData.get(i).getAnswerProvided() == Integer.parseInt(ConvertedQuestionData.get(i).getUserQuestion().getQUESTIONCORRECTOPTION())){
@@ -92,7 +95,9 @@ public class Main2Activity extends AppCompatActivity {
                     }
                 }
 
-                Toast.makeText(Main2Activity.this, "Total Correct Answer is "+count, Toast.LENGTH_SHORT).show();
+                Toast.makeText(Main2Activity.this, "Total Correct Answer is "+count, Toast.LENGTH_SHORT).show();*/
+
+                startActivity(new Intent(Main2Activity.this,FinishActivity.class));
             }
         });
     }
@@ -129,6 +134,7 @@ public class Main2Activity extends AppCompatActivity {
             }
         });
     }
+
 
 
 }
