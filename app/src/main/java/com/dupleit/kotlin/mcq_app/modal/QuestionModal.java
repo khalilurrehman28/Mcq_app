@@ -13,6 +13,8 @@ public class QuestionModal{
 
     private String processStart = constants.notStarted;
 
+    private  int answerProvided;
+
     public QuestionModal(Question_Data userQuestion, boolean isAttempted) {
         this.userQuestion = userQuestion;
         this.IsAttempted = isAttempted;
@@ -40,6 +42,14 @@ public class QuestionModal{
 
     public void setProcessStart(String processStart) {
         this.processStart = processStart;
+    }
+
+    public int getAnswerProvided() {
+        return answerProvided;
+    }
+
+    public void setAnswerProvided(int answerProvided) {
+        this.answerProvided = answerProvided;
     }
 
 }

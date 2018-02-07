@@ -1,5 +1,6 @@
 package com.dupleit.kotlin.mcq_app;
 
+import android.app.Fragment;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -12,6 +13,7 @@ import android.widget.Toast;
 
 import com.dupleit.kotlin.mcq_app.Network.APIService;
 import com.dupleit.kotlin.mcq_app.Network.ApiClient;
+import com.dupleit.kotlin.mcq_app.Question_Ui.questionFragment;
 import com.dupleit.kotlin.mcq_app.adapter.CustomViewPager;
 import com.dupleit.kotlin.mcq_app.adapter.ViewPagerAdapter;
 import com.dupleit.kotlin.mcq_app.modal.Question;
@@ -42,7 +44,8 @@ public class Main2Activity extends AppCompatActivity {
 
     private static String Progress = constants.notStarted;
 
-    Button next, previous;
+    Button next, previous, finish;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,25 +62,9 @@ public class Main2Activity extends AppCompatActivity {
         mPager.setAdapter(mPagerAdapter);
         next = findViewById(R.id.next);
         previous = findViewById(R.id.previous);
+        finish = findViewById(R.id.finish);
 
         getServerData();
-        /*mPager.setCurrentItem(1,false);
-        mPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
-            @Override
-            public void onPageSelected(int position) {
-                // When changing pages, reset the action bar actions since they are dependent
-                // on which page is currently active. An alternative approach is to have each
-                // fragment expose actions itself (rather than the activity exposing actions),
-                // but for simplicity, the activity provides the actions in this sample.
-                invalidateOptionsMenu();
-            }
-
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                super.onPageScrolled(position, positionOffset, positionOffsetPixels);
-                Toast.makeText(Main2Activity.this, ""+position, Toast.LENGTH_SHORT).show();
-            }
-        });*/
 
         next.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -93,6 +80,23 @@ public class Main2Activity extends AppCompatActivity {
                 mPager.setCurrentItem(val-1);
             }
         });
+        finish.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int count =0;
+                for (int i = 0; i <ConvertedQuestionData.size() ; i++) {
+                    if (ConvertedQuestionData.get(i).isAttempted()){
+                        if (ConvertedQuestionData.get(i).getAnswerProvided() == Integer.parseInt(ConvertedQuestionData.get(i).getUserQuestion().getQUESTIONCORRECTOPTION())){
+                            count +=1;
+                        }
+                    }
+                }
+
+                Toast.makeText(Main2Activity.this, "Total attempted is "+count, Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
     }
 
     private void getServerData() {

@@ -65,65 +65,28 @@ public class Question_Data {
         return qUESTIONID;
     }
 
-    public void setQUESTIONID(String qUESTIONID) {
-        this.qUESTIONID = qUESTIONID;
-    }
-
     public String getQUESTIONTEXT() {
         return qUESTIONTEXT;
-    }
-
-    public void setQUESTIONTEXT(String qUESTIONTEXT) {
-        this.qUESTIONTEXT = qUESTIONTEXT;
     }
 
     public String getQUESTIONOPTION1() {
         return qUESTIONOPTION1;
     }
 
-    public void setQUESTIONOPTION1(String qUESTIONOPTION1) {
-        this.qUESTIONOPTION1 = qUESTIONOPTION1;
-    }
-
     public String getQUESTIONOPTION2() {
         return qUESTIONOPTION2;
-    }
-
-    public void setQUESTIONOPTION2(String qUESTIONOPTION2) {
-        this.qUESTIONOPTION2 = qUESTIONOPTION2;
     }
 
     public String getQUESTIONOPTION3() {
         return qUESTIONOPTION3;
     }
 
-    public void setQUESTIONOPTION3(String qUESTIONOPTION3) {
-        this.qUESTIONOPTION3 = qUESTIONOPTION3;
-    }
-
     public String getQUESTIONOPTION4() {
         return qUESTIONOPTION4;
-    }
-
-    public void setQUESTIONOPTION4(String qUESTIONOPTION4) {
-        this.qUESTIONOPTION4 = qUESTIONOPTION4;
     }
 
     public String getQUESTIONCORRECTOPTION() {
         return qUESTIONCORRECTOPTION;
     }
-
-    public void setQUESTIONCORRECTOPTION(String qUESTIONCORRECTOPTION) {
-        this.qUESTIONCORRECTOPTION = qUESTIONCORRECTOPTION;
-    }
-
-    public String getDATETIME() {
-        return dATETIME;
-    }
-
-    public void setDATETIME(String dATETIME) {
-        this.dATETIME = dATETIME;
-    }
-
 
 }

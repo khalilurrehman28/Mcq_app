@@ -7,12 +7,17 @@ import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.dupleit.kotlin.mcq_app.HelperClass.GlideImageGetter;
 import com.dupleit.kotlin.mcq_app.R;
 import com.dupleit.kotlin.mcq_app.ServerDataGetter;
 import com.dupleit.kotlin.mcq_app.modal.QuestionModal;
+import com.dupleit.kotlin.mcq_app.utils.constants;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,7 +27,10 @@ public class questionFragment extends Fragment {
     /**
      * The argument key for the page number this fragment represents.
      */
-    TextView question, option1,option2,option3,option4;
+    TextView question;
+    RadioButton option1,option2,option3,option4;
+    RadioGroup radioGroup;
+    Button erase;
 
     private int mPageNumber;
 
@@ -52,10 +60,11 @@ public class questionFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_question, container, false);
         mPageNumber = getArguments() != null ? getArguments().getInt(ARG_PAGE) : 1;
         question = (TextView) v.findViewById(R.id.question);
-        option1 = (TextView) v.findViewById(R.id.option1);
-        option2 = (TextView) v.findViewById(R.id.option2);
-        option3 = (TextView) v.findViewById(R.id.option3);
-        option4 = (TextView) v.findViewById(R.id.option4);
+        option1 = v.findViewById(R.id.option1);
+        option2 = v.findViewById(R.id.option2);
+        option3 = v.findViewById(R.id.option3);
+        option4 = v.findViewById(R.id.option4);
+        erase = v.findViewById(R.id.erase);
 
         ConvertedQuestionData = new ArrayList<>(ServerDataGetter.getInstance().getConvertedQuestionData());
 
@@ -69,6 +78,44 @@ public class questionFragment extends Fragment {
         option2.setMovementMethod(ScrollingMovementMethod.getInstance());
         option3.setMovementMethod(ScrollingMovementMethod.getInstance());
         option4.setMovementMethod(ScrollingMovementMethod.getInstance());
+
+        erase.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                radioGroup.clearCheck();
+                ConvertedQuestionData.get(mPageNumber).setAnswerProvided(0);
+                ConvertedQuestionData.get(mPageNumber).setAttempted(false);
+                ConvertedQuestionData.get(mPageNumber).setProcessStart(constants.Started);
+            }
+        });
+
+
+        radioGroup = (RadioGroup) v.findViewById(R.id.radioGroup);
+        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup radioGroup, int i) {
+                int answerProvided = 0;
+
+                switch (radioGroup.getCheckedRadioButtonId()){
+                    case R.id.option1:
+                        answerProvided = 1;
+                        break;
+                    case R.id.option2:
+                        answerProvided = 2;
+                        break;
+                    case R.id.option3:
+                        answerProvided = 3;
+                        break;
+                    case R.id.option4:
+                        answerProvided = 4;
+                        break;
+                }
+                ConvertedQuestionData.get(mPageNumber).setAnswerProvided(answerProvided);
+                ConvertedQuestionData.get(mPageNumber).setAttempted(true);
+                ConvertedQuestionData.get(mPageNumber).setProcessStart(constants.Started);
+            }
+        });
+
         //Log.d(constants.question,getArguments().getString(constants.question));
         return v;
     }

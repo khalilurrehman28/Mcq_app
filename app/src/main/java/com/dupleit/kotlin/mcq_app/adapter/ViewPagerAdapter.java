@@ -33,11 +33,11 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
     @Override
     public Fragment getItem(int position) {
         Bundle args = new Bundle();
-        args.putString(question,questionList.get(position).getUserQuestion().getQUESTIONTEXT());
+        /* args.putString(question,questionList.get(position).getUserQuestion().getQUESTIONTEXT());
         args.putString(option1,questionList.get(position).getUserQuestion().getQUESTIONOPTION1());
         args.putString(option2,questionList.get(position).getUserQuestion().getQUESTIONOPTION2());
         args.putString(option3,questionList.get(position).getUserQuestion().getQUESTIONOPTION3());
-        args.putString(option4,questionList.get(position).getUserQuestion().getQUESTIONOPTION4());
+        args.putString(option4,questionList.get(position).getUserQuestion().getQUESTIONOPTION4());*/
         return questionFragment.create(position);
     }
 
@@ -45,8 +45,6 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
     public int getCount() {
         return questionList.size();
     }
-
-
 
     @Override
     public int getItemPosition(Object object) {
