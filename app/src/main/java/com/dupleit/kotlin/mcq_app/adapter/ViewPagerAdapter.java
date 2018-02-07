@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.PagerAdapter;
+import android.view.MotionEvent;
 
 import com.dupleit.kotlin.mcq_app.Question_Ui.questionFragment;
 import com.dupleit.kotlin.mcq_app.modal.QuestionModal;
@@ -44,6 +45,8 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
     public int getCount() {
         return questionList.size();
     }
+
+
 
     @Override
     public int getItemPosition(Object object) {

@@ -1,24 +1,18 @@
 package com.dupleit.kotlin.mcq_app.Question_Ui;
 
-import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.Html;
 import android.text.method.ScrollingMovementMethod;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.WebView;
-import android.widget.RadioButton;
 import android.widget.TextView;
 
 import com.dupleit.kotlin.mcq_app.HelperClass.GlideImageGetter;
 import com.dupleit.kotlin.mcq_app.R;
 import com.dupleit.kotlin.mcq_app.ServerDataGetter;
 import com.dupleit.kotlin.mcq_app.modal.QuestionModal;
-import com.dupleit.kotlin.mcq_app.utils.constants;
-
 import java.util.ArrayList;
 import java.util.List;
 

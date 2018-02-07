@@ -5,10 +5,14 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.MotionEvent;
+import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.dupleit.kotlin.mcq_app.Network.APIService;
 import com.dupleit.kotlin.mcq_app.Network.ApiClient;
+import com.dupleit.kotlin.mcq_app.adapter.CustomViewPager;
 import com.dupleit.kotlin.mcq_app.adapter.ViewPagerAdapter;
 import com.dupleit.kotlin.mcq_app.modal.Question;
 import com.dupleit.kotlin.mcq_app.modal.QuestionModal;
@@ -24,7 +28,7 @@ import retrofit2.Response;
 
 public class Main2Activity extends AppCompatActivity {
 
-    private ViewPager mPager;
+    private CustomViewPager mPager;
 
     /**
      * The pager adapter, which provides the pages to the view pager widget.
@@ -37,6 +41,9 @@ public class Main2Activity extends AppCompatActivity {
     private static List<Question_Data> ServerQuestionData;
 
     private static String Progress = constants.notStarted;
+
+    Button next, previous;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,9 +53,12 @@ public class Main2Activity extends AppCompatActivity {
         Toast.makeText(this, ""+question.size(), Toast.LENGTH_SHORT).show();*/
         ConvertedQuestionData = new ArrayList<>();
         ServerQuestionData = new ArrayList<>();
-        mPager = (ViewPager) findViewById(R.id.pager);
+        mPager = findViewById(R.id.pager);
+        mPager.setPagingEnabled(false);
         mPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(),ConvertedQuestionData);
         mPager.setAdapter(mPagerAdapter);
+        next = findViewById(R.id.next);
+        previous = findViewById(R.id.previous);
 
         getServerData();
         /*mPager.setCurrentItem(1,false);
@@ -69,6 +79,20 @@ public class Main2Activity extends AppCompatActivity {
             }
         });*/
 
+        next.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int val = mPager.getCurrentItem();
+                mPager.setCurrentItem(val+1);
+            }
+        });
+        previous.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int val = mPager.getCurrentItem();
+                mPager.setCurrentItem(val-1);
+            }
+        });
     }
 
     private void getServerData() {
