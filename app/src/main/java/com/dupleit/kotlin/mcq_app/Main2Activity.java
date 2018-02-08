@@ -40,6 +40,7 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import es.dmoral.toasty.Toasty;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -143,9 +144,10 @@ public class Main2Activity extends AppCompatActivity {
             public void onClick(View view) {
                 int val = mPager.getCurrentItem();
                 mPager.setCurrentItem(val+1);
-                if (mPager.getCurrentItem()!=ConvertedQuestionData.size()){
+                if (mPager.getCurrentItem()!=(ConvertedQuestionData.size()-1)){
                     ConvertedQuestionData.get(val+1).setProcessStart(constants.Submittd);
                 }
+                //Toasty.info(getApplicationContext(),mPager.getCurrentItem()+"--"+ConvertedQuestionData.size(),Toast.LENGTH_LONG,true).show();
             }
         });
         previous.setOnClickListener(new View.OnClickListener() {
