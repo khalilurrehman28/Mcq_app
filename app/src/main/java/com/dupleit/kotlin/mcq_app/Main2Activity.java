@@ -143,7 +143,9 @@ public class Main2Activity extends AppCompatActivity {
             public void onClick(View view) {
                 int val = mPager.getCurrentItem();
                 mPager.setCurrentItem(val+1);
-                ConvertedQuestionData.get(val+1).setProcessStart(constants.Submittd);
+                if (mPager.getCurrentItem()!=ConvertedQuestionData.size()){
+                    ConvertedQuestionData.get(val+1).setProcessStart(constants.Submittd);
+                }
             }
         });
         previous.setOnClickListener(new View.OnClickListener() {
@@ -151,7 +153,9 @@ public class Main2Activity extends AppCompatActivity {
             public void onClick(View view) {
                 int val = mPager.getCurrentItem();
                 mPager.setCurrentItem(val-1);
-                ConvertedQuestionData.get(val-1).setProcessStart(constants.Submittd);
+                if (mPager.getCurrentItem()!=ConvertedQuestionData.size()){
+                    ConvertedQuestionData.get(val-1).setProcessStart(constants.Submittd);
+                }
             }
         });
         finish.setOnClickListener(new View.OnClickListener() {
