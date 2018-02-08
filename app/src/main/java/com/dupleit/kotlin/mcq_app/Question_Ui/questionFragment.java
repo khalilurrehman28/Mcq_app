@@ -35,12 +35,12 @@ public class questionFragment extends Fragment {
     RadioGroup radioGroup;
     Button erase;
     ImageView markQuestion;
-    TextView Timertxt ;
+    //TextView Timertxt ;
 
     private int mPageNumber;
 
     private static List<QuestionModal> ConvertedQuestionData;
-    private Timer t;
+    /*private Timer t;
 
     TimerTask timer= new TimerTask(){
         @Override
@@ -56,7 +56,7 @@ public class questionFragment extends Fragment {
             });
 
         }
-    };
+    };*/
 
     /**
      * Factory method for this fragment class. Constructs a new fragment for the given page number.
@@ -83,6 +83,7 @@ public class questionFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_question, container, false);
         ConvertedQuestionData = new ArrayList<>(ServerDataGetter.getInstance().getConvertedQuestionData());
         mPageNumber = getArguments() != null ? getArguments().getInt(ARG_PAGE) : 1;
+        //t = new Timer();
         question = (TextView) v.findViewById(R.id.question);
         option1 = v.findViewById(R.id.option1);
         option2 = v.findViewById(R.id.option2);
@@ -110,8 +111,8 @@ public class questionFragment extends Fragment {
         });
 
 
-        t = new Timer();
-        t.scheduleAtFixedRate(timer , 0 , 1000);
+
+
 
         question.setText(Html.fromHtml(ConvertedQuestionData.get(mPageNumber).getUserQuestion().getQUESTIONTEXT(), new GlideImageGetter(getContext(), question), null));
         option1.setText(Html.fromHtml(ConvertedQuestionData.get(mPageNumber).getUserQuestion().getQUESTIONOPTION1(), new GlideImageGetter(getContext(), option1), null));
@@ -130,7 +131,7 @@ public class questionFragment extends Fragment {
                 radioGroup.clearCheck();
                 ConvertedQuestionData.get(mPageNumber).setAnswerProvided(0);
                 ConvertedQuestionData.get(mPageNumber).setAttempted(false);
-                ConvertedQuestionData.get(mPageNumber).setProcessStart(constants.Started);
+                ConvertedQuestionData.get(mPageNumber).setProcessStart(constants.notStarted);
             }
         });
 
@@ -170,9 +171,21 @@ public class questionFragment extends Fragment {
     }
 
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
+/*    @Override
+    public void onPause() {
+        super.onPause();
         t.cancel();
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        t.scheduleAtFixedRate(timer , 0 , 1000);
+
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+    }*/
 }
