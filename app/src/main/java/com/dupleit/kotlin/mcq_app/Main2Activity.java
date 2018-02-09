@@ -1,9 +1,11 @@
 package com.dupleit.kotlin.mcq_app;
 
 import android.app.Fragment;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.view.PagerAdapter;
@@ -45,6 +47,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static com.dupleit.kotlin.mcq_app.utils.constants.*;
+
 public class Main2Activity extends AppCompatActivity {
 
     private CustomViewPager mPager;
@@ -69,14 +73,17 @@ public class Main2Activity extends AppCompatActivity {
     QuestionListAdapter Questionadapter;
     RecyclerView recyclerView;
     private CardView card;
+    ProgressDialog progress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        /*question = new ArrayList<>(ServerDataGetter.getInstance().getConvertedQuestionData());
-        Toast.makeText(this, ""+question.size(), Toast.LENGTH_SHORT).show();*/
+        progress = new ProgressDialog(this);
+        progress.setTitle("Loading");
+        progress.setMessage("Wait while loading...");
+        progress.setCancelable(false);
+        progress.show();
         ConvertedQuestionData = new ArrayList<>();
         ServerQuestionData = new ArrayList<>();
         Questionadapter = new QuestionListAdapter(this,ConvertedQuestionData);
@@ -93,28 +100,12 @@ public class Main2Activity extends AppCompatActivity {
             @Override
             public void onClick(View view, int position) {
                 card = (CardView) view.findViewById(R.id.QuestionCard);
-                //QuestionModal cdm = ConvertedQuestionData.get(position);
-                /*Toast.makeText(getActivity(), ""+cdm.getSTUDENTROLLNO(), Toast.LENGTH_SHORT).show();
-                if (cdm.getCheck()){
-                    card.setCardBackgroundColor(Color.GREEN);
-                    cdm.setCheck(false);
-                  *//*  attList.add(cdm);
-                    for (int i = 0; i <attList.size() ; i++) {
-                        Log.d("StudentAdd",""+attList.get(i).getSTUDENTROLLNO());
-                    }*//*
-                }else {
-                    card.setCardBackgroundColor(Color.RED);
-                    cdm.setCheck(true);
-                  *//*  if (attList.size()>0) {
-                        attList.remove(attList.indexOf(attList.contains(cdm.getSTUDENTROLLNO())));
-                        for (int i = 0; i <attList.size() ; i++) {
-                            Log.d("StudentRemove",""+attList.get(i).getSTUDENTROLLNO());
-                        }
-                    }*//*
-                }
-                adapter.notifyDataSetChanged();*/
+                ConvertedQuestionData.get(position).setProcessStart(constants.Submittd);
+                QuestionModal cdm = ConvertedQuestionData.get(position);
+                Log.d("QuestionList",""+cdm.getUserQuestion().getQUESTIONID());
                 mPager.setCurrentItem(position);
                 slideUp.animateOut();
+                Questionadapter.notifyDataSetChanged();
             }
 
             @Override
@@ -137,16 +128,13 @@ public class Main2Activity extends AppCompatActivity {
         slideUp = new SlideUp(slideView);
         slideUp.hideImmediately();
 
-        getServerData();
+        new getQuestionList().execute();
 
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 int val = mPager.getCurrentItem();
                 mPager.setCurrentItem(val+1);
-                if (mPager.getCurrentItem()!=(ConvertedQuestionData.size()-1)){
-                    ConvertedQuestionData.get(val+1).setProcessStart(constants.Submittd);
-                }
                 //Toasty.info(getApplicationContext(),mPager.getCurrentItem()+"--"+ConvertedQuestionData.size(),Toast.LENGTH_LONG,true).show();
             }
         });
@@ -155,26 +143,13 @@ public class Main2Activity extends AppCompatActivity {
             public void onClick(View view) {
                 int val = mPager.getCurrentItem();
                 mPager.setCurrentItem(val-1);
-                if (mPager.getCurrentItem()!=ConvertedQuestionData.size()){
-                    ConvertedQuestionData.get(val-1).setProcessStart(constants.Submittd);
-                }
             }
         });
         finish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                /*int count =0;
-                for (int i = 0; i <ConvertedQuestionData.size() ; i++) {
-                    if (ConvertedQuestionData.get(i).isAttempted()){
-                        if (ConvertedQuestionData.get(i).getAnswerProvided() == Integer.parseInt(ConvertedQuestionData.get(i).getUserQuestion().getQUESTIONCORRECTOPTION())){
-                            count +=1;
-                        }
-                    }
-                }
-
-                Toast.makeText(Main2Activity.this, "Total Correct Answer is "+count, Toast.LENGTH_SHORT).show();*/
-
-                startActivity(new Intent(Main2Activity.this,FinishActivity.class));
+               // startActivity(new Intent(Main2Activity.this,FinishActivity.class));
+                Toast.makeText(Main2Activity.this, ""+mPager.getChildCount(), Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -186,7 +161,10 @@ public class Main2Activity extends AppCompatActivity {
 
             @Override
             public void onPageSelected(final int position) {
-                ConvertedQuestionData.get(position).setProcessStart(constants.Submittd);
+                //if (!ConvertedQuestionData.get(position).getUserAnswerState().equals(answerNotViewed)){
+                    ConvertedQuestionData.get(position).setUserAnswerState(answerViewed);
+                //}
+
                 /*
                 Toast.makeText(Main2Activity.this, "Page No->"+position, Toast.LENGTH_SHORT).show();
                 Timer t;
@@ -217,9 +195,9 @@ public class Main2Activity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Questionadapter.notifyDataSetChanged();
                 slideUp.animateIn();
                 fab.hide();
-                Questionadapter.notifyDataSetChanged();
             }
         });
 
@@ -244,39 +222,48 @@ public class Main2Activity extends AppCompatActivity {
         return Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics()));
     }
 
-    private void getServerData() {
-        APIService service = ApiClient.getClient().create(APIService.class);
-        Call<Question> userCall = service.getQuestionAll();
-        userCall.enqueue(new Callback<Question>() {
-            @Override
-            public void onResponse(Call<Question> call, Response<Question> response) {
-                if (response != null && response.isSuccessful()) {
-                    ServerQuestionData = response.body().getQuestion();
-                    for (Question_Data question: ServerQuestionData) {
-                        ConvertedQuestionData.add(new QuestionModal(question,false));
+
+    public class getQuestionList extends AsyncTask<Void,Void,Void> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            APIService service = ApiClient.getClient().create(APIService.class);
+            Call<Question> userCall = service.getQuestionAll();
+            userCall.enqueue(new Callback<Question>() {
+                @Override
+                public void onResponse(Call<Question> call, Response<Question> response) {
+                    if (response != null && response.isSuccessful()) {
+                        ServerQuestionData = response.body().getQuestion();
+                        for (Question_Data question: ServerQuestionData) {
+                            ConvertedQuestionData.add(new QuestionModal(question,false));
+                        }
+                        ServerDataGetter.getInstance().setConvertedQuestionData(ConvertedQuestionData);
+                        mPagerAdapter.notifyDataSetChanged();
+                    } else {
+                        //Toast.makeText( , "data not found", Toast.LENGTH_SHORT).show();
+                        Log.d("userQuestion","data not found");
                     }
-
-                    /*for (QuestionModal newQuestion: ConvertedQuestionData) {
-                        Log.d("userQuestion",newQuestion.getUserQuestion().getQUESTIONID()+"---"+newQuestion.getUserQuestion().getQUESTIONTEXT()+"---"+newQuestion.isAttempted());
-                    }*/
-
-                    ServerDataGetter.getInstance().setConvertedQuestionData(ConvertedQuestionData);
-
-                    mPagerAdapter.notifyDataSetChanged();
-
-                } else {
-                    //Toast.makeText( , "data not found", Toast.LENGTH_SHORT).show();
-                    Log.d("userQuestion","data not found");
                 }
-            }
 
-            @Override
-            public void onFailure(Call<Question> call, Throwable t) {
-                Log.d("onFailure", t.toString());
-            }
-        });
+                @Override
+                public void onFailure(Call<Question> call, Throwable t) {
+                    Log.d("onFailure", t.toString());
+                }
+            });
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            mPagerAdapter.notifyDataSetChanged();
+            progress.dismiss();
+        }
     }
-
-
-
 }

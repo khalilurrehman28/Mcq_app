@@ -16,12 +16,14 @@ public class QuestionModal{
     private  int answerProvided;
     private int timeCounter;
     private boolean ismarked;
+    private String userAnswerState;
 
     public QuestionModal(Question_Data userQuestion, boolean isAttempted) {
         this.userQuestion = userQuestion;
         this.IsAttempted = isAttempted;
         this.timeCounter = 0;
         this.ismarked = false;
+        userAnswerState=constants.answerNotViewed;
     }
 
     public Question_Data getUserQuestion() {
@@ -70,6 +72,14 @@ public class QuestionModal{
 
     public void setIsmarked(boolean ismarked) {
         this.ismarked = ismarked;
+    }
+
+    public String getUserAnswerState() {
+        return userAnswerState;
+    }
+
+    public void setUserAnswerState(String userAnswerState) {
+        this.userAnswerState = userAnswerState;
     }
 }
 

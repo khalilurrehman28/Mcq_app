@@ -51,15 +51,11 @@ public final class GlideImageGetter implements Html.ImageGetter, Drawable.Callba
     @Override
     public Drawable getDrawable(String url) {
         final UrlDrawable urlDrawable = new UrlDrawable();
-
-        
 		System.out.println("Downloading from: " + url);
         Glide.with(mContext)
 				.load(url)
 				.diskCacheStrategy(DiskCacheStrategy.ALL)
 				.into(new ImageGetterViewTarget(mTextView, urlDrawable));
-	
-
         return urlDrawable;
 
     }
@@ -95,8 +91,8 @@ public final class GlideImageGetter implements Html.ImageGetter, Drawable.Callba
             if (resource.getIntrinsicWidth() > 100) {
                 float width;
                 float height;
-                System.out.println("Image width is " + resource.getIntrinsicWidth());
-                System.out.println("View width is " + view.getWidth());
+                //System.out.println("Image width is " + resource.getIntrinsicWidth());
+                //System.out.println("View width is " + view.getWidth());
                 if (resource.getIntrinsicWidth() >= getView().getWidth()) {
                     float downScale = (float) resource.getIntrinsicWidth() / getView().getWidth();
                     width = (float) resource.getIntrinsicWidth() / (float) downScale;
@@ -106,8 +102,7 @@ public final class GlideImageGetter implements Html.ImageGetter, Drawable.Callba
                     width = (float) resource.getIntrinsicWidth() * (float) multiplier;
                     height = (float) resource.getIntrinsicHeight() * (float) multiplier;
                 }
-                System.out.println("New Image width is " + width);
-
+                //System.out.println("New Image width is " + width);
 
                 rect = new Rect(0, 0, Math.round(width), Math.round(height));
             } else {
@@ -118,10 +113,9 @@ public final class GlideImageGetter implements Html.ImageGetter, Drawable.Callba
             mDrawable.setBounds(rect);
             mDrawable.setDrawable(resource);
 
-
             if (resource.isAnimated()) {
                 mDrawable.setCallback(get(getView()));
-                resource.setLoopCount(GlideDrawable.LOOP_FOREVER);
+                resource.setLoopCount(GlideDrawable.LOOP_INTRINSIC);
                 resource.start();
             }
 
@@ -130,6 +124,7 @@ public final class GlideImageGetter implements Html.ImageGetter, Drawable.Callba
         }
 
         private Request request;
+
         @Override
         public Request getRequest() {
             return request;

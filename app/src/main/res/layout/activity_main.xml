@@ -8,14 +8,7 @@
         android:id="@+id/pager"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/dim"
-        android:alpha="0"
-        android:fitsSystemWindows="true"
-        android:background="#303030"/>
-    <include layout="@layout/content_main" />
+
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
@@ -32,14 +25,12 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:id="@+id/linearLayout">
-
         <Button
             android:id="@+id/previous"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Previous" />
-
         <Button
             android:id="@+id/next"
             android:layout_width="wrap_content"
@@ -54,7 +45,14 @@
             android:text="Submit" />
     </LinearLayout>
 
-
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/dim"
+        android:alpha="0"
+        android:fitsSystemWindows="true"
+        android:background="#303030"/>
+    <include layout="@layout/content_main"/>
 
 
 </RelativeLayout>

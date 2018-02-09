@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import static com.dupleit.kotlin.mcq_app.utils.constants.ARG_PAGE;
+import static com.dupleit.kotlin.mcq_app.utils.constants.*;
 
 public class questionFragment extends Fragment {
     /**
@@ -38,6 +38,7 @@ public class questionFragment extends Fragment {
     //TextView Timertxt ;
 
     private int mPageNumber;
+    private int mPageNumberIndex;
 
     private static List<QuestionModal> ConvertedQuestionData;
     /*private Timer t;
@@ -82,7 +83,16 @@ public class questionFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_question, container, false);
         ConvertedQuestionData = new ArrayList<>(ServerDataGetter.getInstance().getConvertedQuestionData());
-        mPageNumber = getArguments() != null ? getArguments().getInt(ARG_PAGE) : 1;
+        mPageNumberIndex= getArguments() != null ? getArguments().getInt(ARG_PAGE) : 1;
+        mPageNumber = mPageNumberIndex;
+
+        /*if (mPageNumberIndex == 1){
+            mPageNumber = mPageNumberIndex;
+        }else{
+            mPageNumber = mPageNumber-1;
+        }*/
+
+        //ConvertedQuestionData.get(mPageNumber).setUserAnswerState(answerViewed);
         //t = new Timer();
         question = (TextView) v.findViewById(R.id.question);
         option1 = v.findViewById(R.id.option1);
@@ -111,9 +121,6 @@ public class questionFragment extends Fragment {
         });
 
 
-
-
-
         question.setText(Html.fromHtml(ConvertedQuestionData.get(mPageNumber).getUserQuestion().getQUESTIONTEXT(), new GlideImageGetter(getContext(), question), null));
         option1.setText(Html.fromHtml(ConvertedQuestionData.get(mPageNumber).getUserQuestion().getQUESTIONOPTION1(), new GlideImageGetter(getContext(), option1), null));
         option2.setText(Html.fromHtml(ConvertedQuestionData.get(mPageNumber).getUserQuestion().getQUESTIONOPTION2(), new GlideImageGetter(getContext(), option2), null));
@@ -131,7 +138,7 @@ public class questionFragment extends Fragment {
                 radioGroup.clearCheck();
                 ConvertedQuestionData.get(mPageNumber).setAnswerProvided(0);
                 ConvertedQuestionData.get(mPageNumber).setAttempted(false);
-                ConvertedQuestionData.get(mPageNumber).setProcessStart(constants.notStarted);
+                ConvertedQuestionData.get(mPageNumber).setUserAnswerState(answerViewed);
             }
         });
 
@@ -139,8 +146,7 @@ public class questionFragment extends Fragment {
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, int i) {
-                int answerProvided = 0;
-
+                int answerProvided;
                 switch (radioGroup.getCheckedRadioButtonId()){
                     case R.id.option1:
                         answerProvided = 1;
@@ -154,10 +160,13 @@ public class questionFragment extends Fragment {
                     case R.id.option4:
                         answerProvided = 4;
                         break;
+                    default:
+                        answerProvided = 0;
+                        break;
                 }
                 ConvertedQuestionData.get(mPageNumber).setAnswerProvided(answerProvided);
                 ConvertedQuestionData.get(mPageNumber).setAttempted(true);
-                ConvertedQuestionData.get(mPageNumber).setProcessStart(constants.Started);
+                ConvertedQuestionData.get(mPageNumber).setUserAnswerState(constants.answerGiven);
             }
         });
         return v;

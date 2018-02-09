@@ -11,10 +11,10 @@ public class constants {
     public static String Started = "inProgress";
     public static String Submittd = "isFinished";
     public static String ARG_PAGE = "page";
-    public static String question = "question";
-    public static String option1 = "option1";
-    public static String option2 = "option2";
-    public static String option3 = "option3";
-    public static String option4 = "option4";
-
+    public static final String answerNotViewed = "NotViewed";
+    public static final String answerSkip = "skip";
+    public static final String answerViewed = "viewed";
+    public static final String answerGiven = "given";
+    public static final String questionIsMarked = "isMarked";
+    public static final String questionIsMarkedAndAnswerGiven = "MarkedAndGiven";
 }

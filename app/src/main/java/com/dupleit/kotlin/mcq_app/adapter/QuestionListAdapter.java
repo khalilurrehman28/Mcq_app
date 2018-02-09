@@ -11,9 +11,10 @@ import android.widget.TextView;
 
 import com.dupleit.kotlin.mcq_app.R;
 import com.dupleit.kotlin.mcq_app.modal.QuestionModal;
-import com.dupleit.kotlin.mcq_app.utils.constants;
 
 import java.util.List;
+
+import static com.dupleit.kotlin.mcq_app.utils.constants.*;
 
 /**
  * Created by android on 8/2/18.
@@ -50,11 +51,9 @@ public class QuestionListAdapter extends RecyclerView.Adapter<QuestionListAdapte
     public void onBindViewHolder(MyViewHolder holder, int position) {
         QuestionModal classD = ClassList.get(position);
         holder.rollnumber.setText(""+(position+1));
-        if (classD.getProcessStart().equals(constants.Started)) {
+
+       /* if (classD.getProcessStart().equals(Started)) {
             holder.card.setCardBackgroundColor(ContextCompat.getColor(mContext, R.color.green));
-        }
-        if (classD.isIsmarked()) {
-            holder.card.setCardBackgroundColor(ContextCompat.getColor(mContext, R.color.purple));
         }
         if (classD.isAttempted()) {
             holder.card.setCardBackgroundColor(ContextCompat.getColor(mContext, R.color.red));
@@ -62,9 +61,36 @@ public class QuestionListAdapter extends RecyclerView.Adapter<QuestionListAdapte
         if(classD.isAttempted() && classD.isIsmarked()){
             holder.card.setCardBackgroundColor(ContextCompat.getColor(mContext, R.color.yello));
         }
-        if(classD.getProcessStart().equals(constants.Submittd)){
+        if(classD.getProcessStart().equals(Submittd)){
             holder.card.setCardBackgroundColor(ContextCompat.getColor(mContext, R.color.colorAccent));
         }
+        if (classD.isIsmarked()) {
+            holder.card.setCardBackgroundColor(ContextCompat.getColor(mContext, R.color.purple));
+        }*/
+
+
+        switch (classD.getUserAnswerState()){
+            case answerGiven:
+                holder.card.setCardBackgroundColor(ContextCompat.getColor(mContext, R.color.answerGiven));
+                break;
+            case answerNotViewed:
+                holder.card.setCardBackgroundColor(ContextCompat.getColor(mContext, R.color.answerNotViewed));
+                break;
+            case answerViewed:
+                holder.card.setCardBackgroundColor(ContextCompat.getColor(mContext, R.color.answerViewed));
+                break;
+            case answerSkip:
+                holder.card.setCardBackgroundColor(ContextCompat.getColor(mContext, R.color.answerSkip));
+                break;
+            case questionIsMarked:
+                holder.card.setCardBackgroundColor(ContextCompat.getColor(mContext, R.color.isMarked));
+                break;
+            case questionIsMarkedAndAnswerGiven:
+                holder.card.setCardBackgroundColor(ContextCompat.getColor(mContext, R.color.isMarkedAndGiven));
+                break;
+        }
+
+
     }
 
     @Override

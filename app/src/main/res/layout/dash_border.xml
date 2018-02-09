@@ -2,7 +2,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_height="wrap_content"
     android:layout_width="wrap_content">
-        <item>
+        <item  android:state_checked="false">
             <shape android:shape="rectangle">
               <!--  <solid android:color="#7bd1fd"/>-->
                 <corners android:radius="10dp" />
@@ -14,4 +14,16 @@
                     />
             </shape>
         </item>
+    <item  android:state_checked="true">
+        <shape android:shape="rectangle">
+            <!--  <solid android:color="#7bd1fd"/>-->
+            <corners android:radius="10dp" />
+            <stroke
+                android:width="3dp"
+                android:dashWidth="12dp"
+                android:color="#6bcf5e"
+                android:dashGap="5dp"
+                />
+        </shape>
+    </item>
 </selector>
