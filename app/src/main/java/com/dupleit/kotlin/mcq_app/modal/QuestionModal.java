@@ -23,7 +23,7 @@ public class QuestionModal{
         this.IsAttempted = isAttempted;
         this.timeCounter = 0;
         this.ismarked = false;
-        userAnswerState=constants.answerNotViewed;
+        this.userAnswerState=constants.answerNotViewed;
     }
 
     public Question_Data getUserQuestion() {

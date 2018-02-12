@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.dupleit.kotlin.mcq_app.HelperClass.GlideImageGetter;
 import com.dupleit.kotlin.mcq_app.R;
@@ -21,8 +22,6 @@ import com.dupleit.kotlin.mcq_app.utils.constants;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import static com.dupleit.kotlin.mcq_app.utils.constants.*;
 
@@ -31,33 +30,13 @@ public class questionFragment extends Fragment {
      * The argument key for the page number this fragment represents.
      */
     TextView question;
-    RadioButton option1,option2,option3,option4;
+    RadioButton option1, option2, option3, option4;
     RadioGroup radioGroup;
     Button erase;
     ImageView markQuestion;
-    //TextView Timertxt ;
-
     private int mPageNumber;
-    private int mPageNumberIndex;
 
     private static List<QuestionModal> ConvertedQuestionData;
-    /*private Timer t;
-
-    TimerTask timer= new TimerTask(){
-        @Override
-        public void run() {
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    int counter = ConvertedQuestionData.get(mPageNumber).getTimeCounter();
-                    counter+=1;
-                    ConvertedQuestionData.get(mPageNumber).setTimeCounter(counter);
-                    Timertxt.setText(Integer.toString(counter));
-                }
-            });
-
-        }
-    };*/
 
     /**
      * Factory method for this fragment class. Constructs a new fragment for the given page number.
@@ -83,54 +62,63 @@ public class questionFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_question, container, false);
         ConvertedQuestionData = new ArrayList<>(ServerDataGetter.getInstance().getConvertedQuestionData());
-        mPageNumberIndex= getArguments() != null ? getArguments().getInt(ARG_PAGE) : 1;
-        mPageNumber = mPageNumberIndex;
-
-        /*if (mPageNumberIndex == 1){
-            mPageNumber = mPageNumberIndex;
+        mPageNumber = getArguments() != null ? getArguments().getInt(ARG_PAGE) : 0;
+        //Toast.makeText(getContext(), " i am me-->"+mPageNumber, Toast.LENGTH_SHORT).show();
+        if (!ConvertedQuestionData.get(mPageNumber).isAttempted()){
+            if (!ConvertedQuestionData.get(mPageNumber).isIsmarked()){
+                ConvertedQuestionData.get(mPageNumber).setUserAnswerState(answerSkip);
+            }else{
+                ConvertedQuestionData.get(mPageNumber).setUserAnswerState(questionIsMarked);
+            }
         }else{
-            mPageNumber = mPageNumber-1;
-        }*/
+            if (!ConvertedQuestionData.get(mPageNumber).isIsmarked()){
+                ConvertedQuestionData.get(mPageNumber).setUserAnswerState(answerSkip);
+            }else{
+                ConvertedQuestionData.get(mPageNumber).setUserAnswerState(questionIsMarked);
+            }
+        }
 
-        //ConvertedQuestionData.get(mPageNumber).setUserAnswerState(answerViewed);
-        //t = new Timer();
-        question = (TextView) v.findViewById(R.id.question);
+        question = v.findViewById(R.id.question);
         option1 = v.findViewById(R.id.option1);
         option2 = v.findViewById(R.id.option2);
         option3 = v.findViewById(R.id.option3);
         option4 = v.findViewById(R.id.option4);
         erase = v.findViewById(R.id.erase);
-        //Timertxt = v.findViewById(R.id.TimerText);
+
         markQuestion = v.findViewById(R.id.markQuestion);
-        if (ConvertedQuestionData.get(mPageNumber).isIsmarked()){
+        if (ConvertedQuestionData.get(mPageNumber).isIsmarked()) {
             markQuestion.setImageResource(R.drawable.ic_marked_click);
-        }else{
+        } else {
             markQuestion.setImageResource(R.drawable.ic_marked_unclicked);
         }
         markQuestion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (ConvertedQuestionData.get(mPageNumber).isIsmarked()){
+                if (ConvertedQuestionData.get(mPageNumber).isIsmarked()) {
                     markQuestion.setImageResource(R.drawable.ic_marked_unclicked);
                     ConvertedQuestionData.get(mPageNumber).setIsmarked(false);
-                }else{
+                    if (ConvertedQuestionData.get(mPageNumber).isAttempted()) {
+                        ConvertedQuestionData.get(mPageNumber).setUserAnswerState(questionIsMarked);
+                    } else {
+                        ConvertedQuestionData.get(mPageNumber).setUserAnswerState(answerSkip);
+                    }
+                } else {
                     markQuestion.setImageResource(R.drawable.ic_marked_click);
                     ConvertedQuestionData.get(mPageNumber).setIsmarked(true);
+                    if (ConvertedQuestionData.get(mPageNumber).isAttempted()) {
+                        ConvertedQuestionData.get(mPageNumber).setUserAnswerState(answerGiven);
+                    } else {
+                        ConvertedQuestionData.get(mPageNumber).setUserAnswerState(answerSkip);
+                    }
                 }
             }
         });
-
 
         question.setText(Html.fromHtml(ConvertedQuestionData.get(mPageNumber).getUserQuestion().getQUESTIONTEXT(), new GlideImageGetter(getContext(), question), null));
         option1.setText(Html.fromHtml(ConvertedQuestionData.get(mPageNumber).getUserQuestion().getQUESTIONOPTION1(), new GlideImageGetter(getContext(), option1), null));
         option2.setText(Html.fromHtml(ConvertedQuestionData.get(mPageNumber).getUserQuestion().getQUESTIONOPTION2(), new GlideImageGetter(getContext(), option2), null));
         option3.setText(Html.fromHtml(ConvertedQuestionData.get(mPageNumber).getUserQuestion().getQUESTIONOPTION3(), new GlideImageGetter(getContext(), option3), null));
         option4.setText(Html.fromHtml(ConvertedQuestionData.get(mPageNumber).getUserQuestion().getQUESTIONOPTION4(), new GlideImageGetter(getContext(), option4), null));
-        question.setMovementMethod(ScrollingMovementMethod.getInstance());
-        option1.setMovementMethod(ScrollingMovementMethod.getInstance());
-        option2.setMovementMethod(ScrollingMovementMethod.getInstance());
-        option3.setMovementMethod(ScrollingMovementMethod.getInstance());
-        option4.setMovementMethod(ScrollingMovementMethod.getInstance());
 
         erase.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -138,7 +126,7 @@ public class questionFragment extends Fragment {
                 radioGroup.clearCheck();
                 ConvertedQuestionData.get(mPageNumber).setAnswerProvided(0);
                 ConvertedQuestionData.get(mPageNumber).setAttempted(false);
-                ConvertedQuestionData.get(mPageNumber).setUserAnswerState(answerViewed);
+                ConvertedQuestionData.get(mPageNumber).setUserAnswerState(answerSkip);
             }
         });
 
@@ -147,7 +135,7 @@ public class questionFragment extends Fragment {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, int i) {
                 int answerProvided;
-                switch (radioGroup.getCheckedRadioButtonId()){
+                switch (radioGroup.getCheckedRadioButtonId()) {
                     case R.id.option1:
                         answerProvided = 1;
                         break;
@@ -171,30 +159,4 @@ public class questionFragment extends Fragment {
         });
         return v;
     }
-
-    /**
-     * Returns the page number represented by this fragment object.
-     */
-    public int getPageNumber() {
-        return mPageNumber;
-    }
-
-
-/*    @Override
-    public void onPause() {
-        super.onPause();
-        t.cancel();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        t.scheduleAtFixedRate(timer , 0 , 1000);
-
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-    }*/
 }

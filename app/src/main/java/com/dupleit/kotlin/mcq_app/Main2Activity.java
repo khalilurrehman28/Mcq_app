@@ -134,6 +134,18 @@ public class Main2Activity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 int val = mPager.getCurrentItem();
+                if (ConvertedQuestionData.get(val).getUserAnswerState().equals(answerGiven)){
+                    if (ConvertedQuestionData.get(val).isIsmarked()){
+                        ConvertedQuestionData.get(val).setUserAnswerState(questionIsMarkedAndAnswerGiven);
+                    }
+                }else{
+                    if (ConvertedQuestionData.get(val).isIsmarked()){
+                        ConvertedQuestionData.get(val).setUserAnswerState(questionIsMarked);
+                    }else {
+                        ConvertedQuestionData.get(val).setUserAnswerState(answerSkip);
+                    }
+                }
+
                 mPager.setCurrentItem(val+1);
                 //Toasty.info(getApplicationContext(),mPager.getCurrentItem()+"--"+ConvertedQuestionData.size(),Toast.LENGTH_LONG,true).show();
             }
@@ -142,6 +154,18 @@ public class Main2Activity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 int val = mPager.getCurrentItem();
+                if (ConvertedQuestionData.get(val).getUserAnswerState().equals(answerGiven)){
+                    if (ConvertedQuestionData.get(val).isIsmarked()){
+                        ConvertedQuestionData.get(val).setUserAnswerState(questionIsMarked);
+                    }
+                }else{
+                    if (ConvertedQuestionData.get(val).isIsmarked()){
+                        ConvertedQuestionData.get(val).setUserAnswerState(questionIsMarked);
+                    }else {
+                        ConvertedQuestionData.get(val).setUserAnswerState(answerSkip);
+                    }
+                }
+
                 mPager.setCurrentItem(val-1);
             }
         });
@@ -245,6 +269,8 @@ public class Main2Activity extends AppCompatActivity {
                         }
                         ServerDataGetter.getInstance().setConvertedQuestionData(ConvertedQuestionData);
                         mPagerAdapter.notifyDataSetChanged();
+                        ConvertedQuestionData.get(0).setUserAnswerState(answerSkip);
+
                     } else {
                         //Toast.makeText( , "data not found", Toast.LENGTH_SHORT).show();
                         Log.d("userQuestion","data not found");

@@ -24,7 +24,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            android:orientation="vertical"
+            android:orientation="horizontal"
             android:padding="5dp">
 
                 <TextView
@@ -40,6 +40,12 @@
                     app:elevation="8dp"
                     android:textStyle="bold"
                     android:layout_centerHorizontal="true" />
+
+            <ImageView
+                android:id="@+id/checked"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                card_view:srcCompat="@drawable/ic_check" />
 
         </LinearLayout>
 

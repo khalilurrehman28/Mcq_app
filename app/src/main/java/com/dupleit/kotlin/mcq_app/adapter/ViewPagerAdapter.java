@@ -12,12 +12,6 @@ import com.dupleit.kotlin.mcq_app.modal.QuestionModal;
 
 import java.util.List;
 
-import static com.dupleit.kotlin.mcq_app.utils.constants.option1;
-import static com.dupleit.kotlin.mcq_app.utils.constants.option2;
-import static com.dupleit.kotlin.mcq_app.utils.constants.option3;
-import static com.dupleit.kotlin.mcq_app.utils.constants.option4;
-import static com.dupleit.kotlin.mcq_app.utils.constants.question;
-
 /**
  * Created by android on 24/1/18.
  */
@@ -32,12 +26,6 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        Bundle args = new Bundle();
-        /* args.putString(question,questionList.get(position).getUserQuestion().getQUESTIONTEXT());
-        args.putString(option1,questionList.get(position).getUserQuestion().getQUESTIONOPTION1());
-        args.putString(option2,questionList.get(position).getUserQuestion().getQUESTIONOPTION2());
-        args.putString(option3,questionList.get(position).getUserQuestion().getQUESTIONOPTION3());
-        args.putString(option4,questionList.get(position).getUserQuestion().getQUESTIONOPTION4());*/
         return questionFragment.create(position);
     }
 
@@ -46,9 +34,4 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
         return questionList.size();
     }
 
-    @Override
-    public int getItemPosition(Object object) {
-        super.getItemPosition(object);
-        return PagerAdapter.POSITION_NONE;
-    }
 }

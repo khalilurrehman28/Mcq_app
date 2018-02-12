@@ -27,8 +27,6 @@ public class ServerDataGetter {
 
     private static List<Question_Data> ServerQuestionData;
 
-    private static String Progress = constants.notStarted;
-
     public static synchronized ServerDataGetter getInstance() {
         if (instance == null){
             instance = new ServerDataGetter();
@@ -42,59 +40,13 @@ public class ServerDataGetter {
        // getAllQuestionFromServer();
     }
 
-    private void getAllQuestionFromServer() {
-        APIService service = ApiClient.getClient().create(APIService.class);
-        Call<Question> userCall = service.getQuestionAll();
-        userCall.enqueue(new Callback<Question>() {
-            @Override
-            public void onResponse(Call<Question> call, Response<Question> response) {
-                if (response != null && response.isSuccessful()) {
-                    ServerQuestionData = response.body().getQuestion();
-                    for (Question_Data question: ServerQuestionData) {
-                        ConvertedQuestionData.add(new QuestionModal(question,false));
-                    }
-
-                    ObserveChnage.isUpdated(true);
-                } else {
-                    //Toast.makeText( , "data not found", Toast.LENGTH_SHORT).show();
-                    Log.d("userQuestion","data not found");
-                }
-            }
-
-            @Override
-            public void onFailure(Call<Question> call, Throwable t) {
-                Log.d("onFailure", t.toString());
-            }
-        });
-    }
-
-    public List<Question_Data> getServerQuestionData() {
-        return ServerQuestionData;
-    }
 
     public List<QuestionModal> getConvertedQuestionData() {
         return ConvertedQuestionData;
-    }
-
-    public String getProgress() {
-        return Progress;
-    }
-
-    public void setProgress(String progress) {
-        Progress = progress;
-    }
-
-    public int getQuestionCount(){
-        return ServerQuestionData.size();
     }
 
     public void setConvertedQuestionData(List<QuestionModal> convertedQuestionData) {
         ConvertedQuestionData = convertedQuestionData;
     }
 
-    public interface IServerDataGeter {
-        Boolean isUpdated(boolean b);
-    }
-
-    private IServerDataGeter ObserveChnage;
 }
