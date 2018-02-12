@@ -62,7 +62,7 @@ public class questionFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_question, container, false);
         ConvertedQuestionData = new ArrayList<>(ServerDataGetter.getInstance().getConvertedQuestionData());
-        mPageNumber = getArguments() != null ? getArguments().getInt(ARG_PAGE) : 0;
+        mPageNumber = getArguments() != null ? getArguments().getInt(ARG_PAGE) : 1;
         //Toast.makeText(getContext(), " i am me-->"+mPageNumber, Toast.LENGTH_SHORT).show();
         if (!ConvertedQuestionData.get(mPageNumber).isAttempted()){
             if (!ConvertedQuestionData.get(mPageNumber).isIsmarked()){

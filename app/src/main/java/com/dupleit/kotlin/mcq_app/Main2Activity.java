@@ -264,8 +264,10 @@ public class Main2Activity extends AppCompatActivity {
                 public void onResponse(Call<Question> call, Response<Question> response) {
                     if (response != null && response.isSuccessful()) {
                         ServerQuestionData = response.body().getQuestion();
+                        int count =1;
                         for (Question_Data question: ServerQuestionData) {
                             ConvertedQuestionData.add(new QuestionModal(question,false));
+                            count++;
                         }
                         ServerDataGetter.getInstance().setConvertedQuestionData(ConvertedQuestionData);
                         mPagerAdapter.notifyDataSetChanged();
