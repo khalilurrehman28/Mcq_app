@@ -18,19 +18,15 @@
         card_view:cardBackgroundColor="#d8d8d8"
         card_view:cardCornerRadius="5dp">
 
-        <LinearLayout
-            android:id="@+id/homeworkLayout"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:orientation="horizontal"
-            android:padding="5dp">
 
+
+            <RelativeLayout
+                android:layout_width="70dp"
+                android:layout_height="70dp">
                 <TextView
                     android:id="@+id/questionNumber"
-                    android:layout_width="70dp"
-                    android:layout_height="70dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:elevation="4dp"
                     android:fontFamily="sans-serif-light"
                     android:gravity="center"
@@ -40,14 +36,19 @@
                     app:elevation="8dp"
                     android:textStyle="bold"
                     android:layout_centerHorizontal="true" />
-
-            <ImageView
-                android:id="@+id/checked"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                card_view:srcCompat="@drawable/ic_check" />
-
-        </LinearLayout>
+               <LinearLayout
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content"
+                   android:gravity="end"
+                   >
+                   <ImageView
+                       android:id="@+id/checked"
+                       android:visibility="gone"
+                       android:layout_width="wrap_content"
+                       android:layout_height="wrap_content"
+                       card_view:srcCompat="@drawable/ic_check" />
+               </LinearLayout>
+            </RelativeLayout>
 
     </android.support.v7.widget.CardView>
 

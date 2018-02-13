@@ -10,5 +10,6 @@
     <color name="isMarked">#0f143b</color>
     <color name="isMarkedAndGiven">#f7f97e</color>
     <color name="white">#ffffff</color>
+    <color name="markedColor">#d79634</color>
 
 </resources>

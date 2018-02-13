@@ -3,7 +3,6 @@ package com.dupleit.kotlin.mcq_app.Question_Ui;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.Html;
-import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,7 +17,6 @@ import com.dupleit.kotlin.mcq_app.HelperClass.GlideImageGetter;
 import com.dupleit.kotlin.mcq_app.R;
 import com.dupleit.kotlin.mcq_app.ServerDataGetter;
 import com.dupleit.kotlin.mcq_app.modal.QuestionModal;
-import com.dupleit.kotlin.mcq_app.utils.constants;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,8 +30,7 @@ public class questionFragment extends Fragment {
     TextView question;
     RadioButton option1, option2, option3, option4;
     RadioGroup radioGroup;
-    Button erase;
-    ImageView markQuestion;
+    ImageView markQuestion,erase;
     private int mPageNumber;
 
     private static List<QuestionModal> ConvertedQuestionData;
@@ -63,20 +60,6 @@ public class questionFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_question, container, false);
         ConvertedQuestionData = new ArrayList<>(ServerDataGetter.getInstance().getConvertedQuestionData());
         mPageNumber = getArguments() != null ? getArguments().getInt(ARG_PAGE) : 1;
-        //Toast.makeText(getContext(), " i am me-->"+mPageNumber, Toast.LENGTH_SHORT).show();
-        if (!ConvertedQuestionData.get(mPageNumber).isAttempted()){
-            if (!ConvertedQuestionData.get(mPageNumber).isIsmarked()){
-                ConvertedQuestionData.get(mPageNumber).setUserAnswerState(answerSkip);
-            }else{
-                ConvertedQuestionData.get(mPageNumber).setUserAnswerState(questionIsMarked);
-            }
-        }else{
-            if (!ConvertedQuestionData.get(mPageNumber).isIsmarked()){
-                ConvertedQuestionData.get(mPageNumber).setUserAnswerState(answerSkip);
-            }else{
-                ConvertedQuestionData.get(mPageNumber).setUserAnswerState(questionIsMarked);
-            }
-        }
 
         question = v.findViewById(R.id.question);
         option1 = v.findViewById(R.id.option1);
@@ -86,6 +69,7 @@ public class questionFragment extends Fragment {
         erase = v.findViewById(R.id.erase);
 
         markQuestion = v.findViewById(R.id.markQuestion);
+
         if (ConvertedQuestionData.get(mPageNumber).isIsmarked()) {
             markQuestion.setImageResource(R.drawable.ic_marked_click);
         } else {
@@ -97,19 +81,23 @@ public class questionFragment extends Fragment {
                 if (ConvertedQuestionData.get(mPageNumber).isIsmarked()) {
                     markQuestion.setImageResource(R.drawable.ic_marked_unclicked);
                     ConvertedQuestionData.get(mPageNumber).setIsmarked(false);
-                    if (ConvertedQuestionData.get(mPageNumber).isAttempted()) {
-                        ConvertedQuestionData.get(mPageNumber).setUserAnswerState(questionIsMarked);
+                    if (ConvertedQuestionData.get(mPageNumber).getUserAnswerState().equals(questionIsMarked)) {
+                        if(ConvertedQuestionData.get(mPageNumber).isAttempted()){
+                            ConvertedQuestionData.get(mPageNumber).setUserAnswerState(answerGiven);
+                        }else{
+                            ConvertedQuestionData.get(mPageNumber).setUserAnswerState(answerSkip);
+                        }
                     } else {
-                        ConvertedQuestionData.get(mPageNumber).setUserAnswerState(answerSkip);
+                        if(ConvertedQuestionData.get(mPageNumber).isAttempted()){
+                            ConvertedQuestionData.get(mPageNumber).setUserAnswerState(answerGiven);
+                        }else{
+                            ConvertedQuestionData.get(mPageNumber).setUserAnswerState(answerSkip);
+                        }
                     }
                 } else {
                     markQuestion.setImageResource(R.drawable.ic_marked_click);
                     ConvertedQuestionData.get(mPageNumber).setIsmarked(true);
-                    if (ConvertedQuestionData.get(mPageNumber).isAttempted()) {
-                        ConvertedQuestionData.get(mPageNumber).setUserAnswerState(answerGiven);
-                    } else {
-                        ConvertedQuestionData.get(mPageNumber).setUserAnswerState(answerSkip);
-                    }
+                    ConvertedQuestionData.get(mPageNumber).setUserAnswerState(questionIsMarked);
                 }
             }
         });
@@ -130,7 +118,7 @@ public class questionFragment extends Fragment {
             }
         });
 
-        radioGroup = (RadioGroup) v.findViewById(R.id.radioGroup);
+        radioGroup = v.findViewById(R.id.radioGroup);
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, int i) {
@@ -154,7 +142,11 @@ public class questionFragment extends Fragment {
                 }
                 ConvertedQuestionData.get(mPageNumber).setAnswerProvided(answerProvided);
                 ConvertedQuestionData.get(mPageNumber).setAttempted(true);
-                ConvertedQuestionData.get(mPageNumber).setUserAnswerState(constants.answerGiven);
+                if (ConvertedQuestionData.get(mPageNumber).isIsmarked()) {
+                    ConvertedQuestionData.get(mPageNumber).setUserAnswerState(questionIsMarked);
+                } else {
+                    ConvertedQuestionData.get(mPageNumber).setUserAnswerState(answerGiven);
+                }
             }
         });
         return v;

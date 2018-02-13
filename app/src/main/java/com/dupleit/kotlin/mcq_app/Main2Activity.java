@@ -100,12 +100,23 @@ public class Main2Activity extends AppCompatActivity {
             @Override
             public void onClick(View view, int position) {
                 card = (CardView) view.findViewById(R.id.QuestionCard);
-                ConvertedQuestionData.get(position).setProcessStart(constants.Submittd);
-                QuestionModal cdm = ConvertedQuestionData.get(position);
-                Log.d("QuestionList",""+cdm.getUserQuestion().getQUESTIONID());
                 mPager.setCurrentItem(position);
                 slideUp.animateOut();
                 Questionadapter.notifyDataSetChanged();
+                //ConvertedQuestionData.get(position).setProcessStart(constants.Submittd);
+                if (!ConvertedQuestionData.get(position).getUserAnswerState().equals(questionIsMarked)){
+                    if(ConvertedQuestionData.get(position).isAttempted()){
+                        ConvertedQuestionData.get(position).setUserAnswerState(answerGiven);
+                    }else{
+                        ConvertedQuestionData.get(position).setUserAnswerState(answerSkip);
+                    }
+                }else{
+                    ConvertedQuestionData.get(position).setUserAnswerState(questionIsMarked);
+                }
+                QuestionModal cdm = ConvertedQuestionData.get(position);
+                Log.d("QuestionList",""+cdm.getUserQuestion().getQUESTIONID());
+
+
             }
 
             @Override
@@ -136,7 +147,7 @@ public class Main2Activity extends AppCompatActivity {
                 int val = mPager.getCurrentItem();
                 if (ConvertedQuestionData.get(val).getUserAnswerState().equals(answerGiven)){
                     if (ConvertedQuestionData.get(val).isIsmarked()){
-                        ConvertedQuestionData.get(val).setUserAnswerState(questionIsMarkedAndAnswerGiven);
+                        ConvertedQuestionData.get(val).setUserAnswerState(questionIsMarked);
                     }
                 }else{
                     if (ConvertedQuestionData.get(val).isIsmarked()){
@@ -185,29 +196,17 @@ public class Main2Activity extends AppCompatActivity {
 
             @Override
             public void onPageSelected(final int position) {
-                //if (!ConvertedQuestionData.get(position).getUserAnswerState().equals(answerNotViewed)){
-                    ConvertedQuestionData.get(position).setUserAnswerState(answerViewed);
-                //}
-
-                /*
-                Toast.makeText(Main2Activity.this, "Page No->"+position, Toast.LENGTH_SHORT).show();
-                Timer t;
-                TimerTask timer= new TimerTask(){
-                    @Override
-                    public void run() {
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                int counter = ConvertedQuestionData.get(position).getTimeCounter();
-                                counter+=1;
-                                ConvertedQuestionData.get(position).setTimeCounter(counter);
-                                //Timertxt.setText(Integer.toString(counter));
-                            }
-                        });
+                if (ConvertedQuestionData.get(position).getUserAnswerState().equals(answerGiven)){
+                    if (ConvertedQuestionData.get(position).isIsmarked()){
+                        ConvertedQuestionData.get(position).setUserAnswerState(questionIsMarked);
                     }
-                };
-                t = new Timer();
-                t.scheduleAtFixedRate(timer , 0 , 1000);*/
+                }else{
+                    if (ConvertedQuestionData.get(position).isIsmarked()){
+                        ConvertedQuestionData.get(position).setUserAnswerState(questionIsMarked);
+                    }else {
+                        ConvertedQuestionData.get(position).setUserAnswerState(answerSkip);
+                    }
+                }
             }
 
             @Override

@@ -30,13 +30,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Previous" />
+            android:drawableBottom="@drawable/ic_back"
+            android:drawableTint="@color/colorAccent" />
         <Button
             android:id="@+id/next"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Next" />
+            android:drawableBottom="@drawable/ic_forward"
+            android:drawableTint="@color/colorAccent"/>
         <Button
             android:id="@+id/finish"
             android:layout_width="wrap_content"
@@ -50,6 +52,7 @@
         android:layout_height="match_parent"
         android:id="@+id/dim"
         android:alpha="0"
+
         android:fitsSystemWindows="true"
         android:background="#303030"/>
     <include layout="@layout/content_main"/>

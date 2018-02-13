@@ -35,7 +35,7 @@ public class QuestionListAdapter extends RecyclerView.Adapter<QuestionListAdapte
             super(view);
             rollnumber = (TextView) view.findViewById(R.id.questionNumber);
             card = (CardView) itemView.findViewById(R.id.QuestionCard);
-            checked = view.findViewById(R.id.checked);
+            checked = itemView.findViewById(R.id.checked);
         }
     }
 
@@ -66,14 +66,12 @@ public class QuestionListAdapter extends RecyclerView.Adapter<QuestionListAdapte
                 holder.card.setCardBackgroundColor(ContextCompat.getColor(mContext, R.color.answerSkip));
                 break;
             case questionIsMarked:
-                if (!classD.isAttempted()){
-                    holder.checked.setVisibility(View.GONE);
-                }
                 holder.card.setCardBackgroundColor(ContextCompat.getColor(mContext, R.color.isMarked));
+                /*if (classD.isAttempted()){
+                    holder.checked.setVisibility(View.VISIBLE);
+                }*/
                 break;
         }
-
-
     }
 
     @Override
